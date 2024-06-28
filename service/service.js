@@ -2,12 +2,7 @@ const { where } = require("sequelize");
 const { user } = require("../models");
 const saveUser = (req, res) => {
   user
-    .create({
-      firstName: "Rajat",
-      lastName: "Golakonda",
-      age: 25,
-      email: "abc@xyz.com",
-    })
+    .create(req.body)
     .then((users) => {
       res.status(200).json(users);
     })
@@ -47,13 +42,23 @@ const getUser = (req, res) => {
 
   // res.send("particular user");
 };
+//Update Querry is in progress
+const updateUser = async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  const oldUser = await user.findByPk(req.params.id);
+  if (oldUser) {
+    await oldUser.update(req.body).catch((err) => {
+      console.log(err);
+    });
+    res.status(200).json(oldUser);
+  }
 
-const updateUser = (req, res) => {
-  res.send("upadate User");
+  // res.send("upadate User");
 };
 
 const deleteUser = (req, res) => {
-  user.distory({ where: { id: req.param.id } }).then();
+  user.distory({ where: { id: req.params.id } }).then();
   res.send("delete usre");
 };
 
